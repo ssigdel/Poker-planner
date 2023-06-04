@@ -33,10 +33,8 @@ io.on("connect", (socket) => {
   //Create room.
   socket.on("createRoom", () => {
     socket.join(socket.id);
+    socket.emit("roomName", socket.id);
   });
-
-  //Emit room name.
-  socket.emit("roomName", socket.id);
 
   //Called when user gets disconnected.
   socket.on("disconnect", () => {
