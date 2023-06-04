@@ -1,0 +1,174 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.App {
+  background-color: #fafafa;
+}
+
+.main-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  padding: 16px 24px;
+  background-color: #36b86a;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.header {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.quit {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+}
+
+.quit-icon {
+  margin-right: 4px;
+}
+
+.body-wrapper {
+  flex: 1;
+  display: flex;
+  padding: 24px;
+}
+
+.content-wrapper {
+  flex: 1;
+}
+
+.sub-heading {
+  font-size: 20px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 24px 0px;
+}
+
+.card {
+  cursor: pointer;
+  padding: 32px 24px;
+  border-radius: 8px;
+  margin-right: 24px;
+  border: 1px solid #000000;
+  background-color: white;
+  margin-bottom: 16px;
+}
+
+.card:hover {
+  background-color: rgb(224, 224, 224);
+}
+
+.value {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.board-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.board-container {
+  margin: 24px 0px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  min-height: 300px;
+  border-radius: 8px;
+  background-color: rgb(226, 242, 247);
+}
+
+.home-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-heading {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.text {
+  color: #36b86a;
+}
+
+.description {
+  margin-bottom: 24px;
+}
+
+.btn-container {
+  display: flex;
+  align-items: center;
+}
+
+.option {
+  margin: 0 12px;
+}
+
+.board-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-right: 24px;
+}
+
+.board-card > .card {
+  margin-right: 0px;
+}
+
+.card-user {
+  font-size: 14px;
+  color: #616161;
+}
+
+.team-wrapper {
+  display: flex;
+  margin-top: 16px;
+}
+
+.user {
+  display: flex;
+  color: #616161;
+  margin-right: 16px;
+  align-items: center;
+}
+
+.user-icon {
+  margin-right: 4px;
+}
+
+.disabled {
+  pointer-events: none;
+  color: #e0e0e0;
+  border: 1px solid #e0e0e0;
+}
+
+.hidden {
+  background-color: #57b87e;
+  padding: 42px 30px;
+}
+
+.current-user {
+  color: #42a5f5;
+}
