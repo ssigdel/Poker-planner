@@ -65,9 +65,14 @@ io.on("connect", (socket) => {
       if (user) {
         user = { ...user, value };
 
-        room.users[userId] = user;
-        room.avgValue = 0;
-        room.hasRoundEnded = false;
+        room = {
+          ...room,
+          users: { ...room.users, [userId]: user },
+          avgValue: 0,
+          hasRoundEnded: false,
+        };
+
+        rooms = { ...rooms, [roomName]: room };
 
         io.to(roomName).emit("userCards", {
           cardValues: Object.values(room.users),
@@ -80,12 +85,12 @@ io.on("connect", (socket) => {
 
   //Called when the admin ends the round.
   socket.on("endRound", (roomName: string) => {
-    let cardSum;
+    let cardSum: number;
     let room = rooms[roomName];
 
     if (room) {
       let users: User[] = Object.values(room.users);
-      let count = 0;
+      let count: number = 0;
 
       cardSum = users?.reduce((acc: any, item: any) => {
         if (item.value) {
@@ -95,11 +100,11 @@ io.on("connect", (socket) => {
         return acc;
       }, 0);
 
-      let avgValue = (cardSum / count).toFixed(2);
+      let avgValue = isNaN(cardSum / count) ? 0 : (cardSum / count).toFixed(2);
 
       room = { ...room, avgValue, hasRoundEnded: true };
 
-      rooms = { ...rooms, roomName: room };
+      rooms = { ...rooms, [roomName]: room };
 
       io.to(roomName).emit("userCards", {
         cardValues: Object.values(room.users),
@@ -140,14 +145,9 @@ io.on("connect", (socket) => {
     let room = rooms[roomName];
 
     if (room) {
-      let users: any = {};
-      let userList: User[] = Object.values(room.users);
+      let { users } = room;
 
-      userList = userList.filter((u: User) => u.id !== userId);
-
-      userList.forEach((item) => {
-        users[item?.id] = { ...item, value: 0 };
-      });
+      delete users[userId];
 
       room = {
         ...room,

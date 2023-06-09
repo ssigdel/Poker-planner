@@ -160,8 +160,8 @@
 
 .disabled {
   pointer-events: none;
-  color: #e0e0e0;
-  border: 1px solid #e0e0e0;
+  color: #bdbdbd;
+  border: 1px solid #bdbdbd;
 }
 
 .hidden {
