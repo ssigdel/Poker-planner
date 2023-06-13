@@ -4,6 +4,10 @@ import { Server } from "socket.io";
 
 import express, { Application } from "express";
 
+import { User, Room } from "./model";
+import { getUserCards } from "./utils/getUserCards";
+import { getCardAverage } from "./utils/getCardAverage";
+
 config();
 
 const app: Application = express();
@@ -12,19 +16,6 @@ const PORT: Number = Number(process.env.PORT) || 8080;
 
 const server = http.createServer(app);
 
-interface User {
-  id: string;
-  name: string;
-  value?: number;
-}
-
-interface Room {
-  name: string;
-  users: {};
-  avgValue?: number;
-  hasRoundEnded: boolean;
-}
-
 let rooms: any = {};
 
 const io = new Server(server, { cors: { origin: "http://localhost:3000" } });
@@ -32,7 +23,6 @@ const io = new Server(server, { cors: { origin: "http://localhost:3000" } });
 io.on("connect", (socket) => {
   //Create room.
   socket.on("createRoom", () => {
-    socket.join(socket.id);
     socket.emit("roomName", socket.id);
   });
 
@@ -41,16 +31,22 @@ io.on("connect", (socket) => {
     console.log("Client disconnected");
   });
 
-  //Called on user joins the room.
+  //Called when user joins the room.
   socket.on("joinRoom", (roomName: string, user: User) => {
     socket.join(roomName);
 
-    let room = rooms[roomName];
+    let room: Room = rooms[roomName];
+
     if (!room) {
-      room = { name: roomName, users: {} };
-      rooms[roomName] = room;
+      room = { name: roomName, users: {}, hasRoundEnded: false };
     }
-    room.users[socket.id] = { ...user, id: socket.id };
+
+    room = {
+      ...room,
+      users: { ...room.users, [socket.id]: { ...user, id: socket.id } },
+    };
+
+    rooms = { ...rooms, [roomName]: room };
 
     io.to(roomName).emit("connectedUsers", Object.values(room.users));
   });
@@ -60,7 +56,7 @@ io.on("connect", (socket) => {
     let room = rooms[roomName];
 
     if (room) {
-      let user = room.users[userId];
+      let user: User = room.users[userId];
 
       if (user) {
         user = { ...user, value };
@@ -69,54 +65,35 @@ io.on("connect", (socket) => {
           ...room,
           users: { ...room.users, [userId]: user },
           avgValue: 0,
-          hasRoundEnded: false,
         };
 
         rooms = { ...rooms, [roomName]: room };
 
-        io.to(roomName).emit("userCards", {
-          cardValues: Object.values(room.users),
-          avgValue: room.avgValue,
-          hasRoundEnded: room.hasRoundEnded,
-        });
+        io.to(roomName).emit("userCards", getUserCards(room));
       }
     }
   });
 
   //Called when the admin ends the round.
   socket.on("endRound", (roomName: string) => {
-    let cardSum: number;
-    let room = rooms[roomName];
+    let room: Room = rooms[roomName];
 
     if (room) {
       let users: User[] = Object.values(room.users);
-      let count: number = 0;
 
-      cardSum = users?.reduce((acc: any, item: any) => {
-        if (item.value) {
-          count += 1;
-          return (acc += item?.value);
-        }
-        return acc;
-      }, 0);
-
-      let avgValue = isNaN(cardSum / count) ? 0 : (cardSum / count).toFixed(2);
+      const avgValue = getCardAverage(users);
 
       room = { ...room, avgValue, hasRoundEnded: true };
 
       rooms = { ...rooms, [roomName]: room };
 
-      io.to(roomName).emit("userCards", {
-        cardValues: Object.values(room.users),
-        avgValue: room.avgValue,
-        hasRoundEnded: room.hasRoundEnded,
-      });
+      io.to(roomName).emit("userCards", getUserCards(room));
     }
   });
 
   //Called when new round is created.
   socket.on("newRound", (roomName: string) => {
-    let room = rooms[roomName];
+    let room: Room = rooms[roomName];
 
     if (room) {
       let users: any = {};
@@ -132,15 +109,11 @@ io.on("connect", (socket) => {
 
       rooms = { ...rooms, [roomName]: room };
 
-      io.to(roomName).emit("userCards", {
-        cardValues: Object.values(room.users),
-        avgValue: room.avgValue,
-        hasRoundEnded: room.hasRoundEnded,
-      });
+      io.to(roomName).emit("userCards", getUserCards(room));
     }
   });
 
-  //Called on user leaves the room.
+  //Called when user leaves the room.
   socket.on("leaveRoom", (roomName: string, userId: string) => {
     let room = rooms[roomName];
 
