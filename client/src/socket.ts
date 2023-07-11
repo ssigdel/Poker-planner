@@ -1,7 +1,5 @@
 import { io } from "socket.io-client";
 
-const URL = "http://localhost:5050";
-
-export const socket = io(URL, {
+export const socket = io(process.env.REACT_APP_API_BASE_URL || "", {
   autoConnect: false,
 });

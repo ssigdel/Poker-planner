@@ -1,6 +1,6 @@
 import { UserCard } from "../models/card";
 
-const isUserValuePresent: (userId: String | null, cardValues: []) => boolean = (
+const isUserValuePresent: (userId: string | null, cardValues: []) => boolean = (
   userId,
   cardValues
 ) => {

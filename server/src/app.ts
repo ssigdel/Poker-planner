@@ -12,7 +12,7 @@ config();
 
 const app: Application = express();
 
-const PORT: Number = Number(process.env.PORT) || 8080;
+const PORT: number = Number(process.env.PORT) || 8080;
 
 const server = http.createServer(app);
 
