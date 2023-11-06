@@ -18,7 +18,7 @@ const server = http.createServer(app);
 
 let rooms: any = {};
 
-const io = new Server(server, { cors: { origin: "http://localhost:3000" } });
+const io = new Server(server, { cors: { origin: process.env.CLIENT_APP } });
 
 io.on("connect", (socket) => {
   //Create room.
