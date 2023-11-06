@@ -18,7 +18,7 @@ const CardView: React.FC<CardViewProps> = (props) => {
 
   return (
     <div>
-      <span className="sub-heading">Cards</span>
+      <div className="sub-heading card-heading">Cards</div>
       <div className="card-container">{cardList}</div>
     </div>
   );
