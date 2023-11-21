@@ -19,7 +19,9 @@ const server = http.createServer(app);
 
 // Allow requests only from a specific origin
 app.use(cors({
-  origin: process.env.CLIENT_APP
+  origin: process.env.CLIENT_APP,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
 }));
 
 
