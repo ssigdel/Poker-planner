@@ -1,6 +1,7 @@
 import http from "http";
 import { config } from "dotenv";
 import { Server } from "socket.io";
+import  cors  from "cors";
 
 import express, { Application } from "express";
 
@@ -15,6 +16,12 @@ const app: Application = express();
 const PORT: number = Number(process.env.PORT) || 8080;
 
 const server = http.createServer(app);
+
+// Allow requests only from a specific origin
+app.use(cors({
+  origin: process.env.CLIENT_APP
+}));
+
 
 let rooms: any = {};
 
