@@ -17,17 +17,16 @@ const PORT: number = Number(process.env.PORT) || 8080;
 
 const server = http.createServer(app);
 
+let rooms: any = {};
+
+const io = new Server(server, { cors: { origin: process.env.CLIENT_APP } });
+
 // Allow requests only from a specific origin
 app.use(cors({
   origin: process.env.CLIENT_APP,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
-
-
-let rooms: any = {};
-
-const io = new Server(server, { cors: { origin: process.env.CLIENT_APP } });
 
 io.on("connect", (socket) => {
   //Create room.
