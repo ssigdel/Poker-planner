@@ -24,8 +24,6 @@ const io = new Server(server, { cors: { origin: process.env.CLIENT_APP } });
 // Allow requests only from a specific origin
 app.use(cors({
   origin: process.env.CLIENT_APP,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
 }));
 
 io.on("connect", (socket) => {
