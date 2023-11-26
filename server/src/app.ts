@@ -21,7 +21,7 @@ let rooms: any = {};
 
 const io = new Server(server, { cors: { origin: process.env.CLIENT_APP } });
 
-// Allow requests only from a specific origin
+// Allow requests only from a specific origin i.e client side.
 app.use(cors({
   origin: process.env.CLIENT_APP,
 }));
